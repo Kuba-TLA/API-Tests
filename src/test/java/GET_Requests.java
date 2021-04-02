@@ -123,12 +123,12 @@ public class GET_Requests {
     @Test(description = "Getting cookie details and storing it")
     void test020(){
         Cookie cookie = given()
+                .when()
                 .get("https://jsonplaceholder.typicode.com/users")
                 .then()
                 .statusCode(200)
                 .extract()
                 .detailedCookie("__cfduid");
-
 
         System.out.println(cookie.getDomain());
         System.out.println(cookie.getValue());
