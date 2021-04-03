@@ -1,4 +1,6 @@
 {
-  "name": "Node.js",
-  "duration": "1 month"
+  "firstName": "Olivia",
+  "lastName": "Jhonson",
+  "batch": 3,
+  "email": "olivia_jhonson@test.com"
 }

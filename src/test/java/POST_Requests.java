@@ -1,3 +1,4 @@
+import data.DataProviders;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.http.Method;
@@ -5,6 +6,7 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.json.simple.JSONObject;
 import org.testng.Assert;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import utils.JsonUtils;
 
@@ -12,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
 
 public class POST_Requests {
     String taskURL = "https://tla-school-api.herokuapp.com/api/school/programs/sdetcourse";
@@ -125,13 +128,63 @@ public class POST_Requests {
                 .then()
                 .statusCode(200)
                 .log().body();
+    }
 
+    @Test(description = "Bearer token example")
+    void test08(){
+        String token = "2e93a51c1044d5e261dd2c08198f9a02d1cb00edb22a875c534e1589ff0f8e73";
+
+        Map<String, String> user = new HashMap<>();
+        user.put("name", "Alicia");
+        user.put("gender", "Female");
+        user.put("email", "alicia1@test.com");
+        user.put("status", "Active");
+
+        given()
+                .headers("Authorization", "Bearer " + token)
+                .headers("content-type", ContentType.JSON)
+                .body(user)
+                .when()
+                .post("https://gorest.co.in/public-api/users")
+                .then()
+                .statusCode(200)
+                .log().body();
+    }
+
+    @Test(description = "basic authorization")
+    void test09(){
+        String URL = "https://tla-school-api.herokuapp.com/api/school/departments/gettoken";
+
+        given()
+                .auth()
+                .preemptive()
+                .basic("user", "user123")
+                .get(URL)
+                .then()
+                .statusCode(200)
+                .log()
+                .body();
+    }
+
+    //NOTE: Using dataProvider to create multiple courses
+    @Test(description = "POST request using DataProvider", dataProvider = "courseData", dataProviderClass = DataProviders.class)
+    void test010(String courseName, String duration){
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("name", courseName);
+        jsonObject.put("duration", duration);
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(jsonObject)
+                .when()
+                .post("https://tla-school-api.herokuapp.com/api/school/programs/devcourse")
+                .then()
+                .statusCode(200)
+                .body("data.name", equalTo(courseName))
+                .log().body();
     }
 
 
-
-
-    //Class Task: Create a POST request for gorest api and create a user
 
 
 
