@@ -1,14 +1,8 @@
-import data.DataProviders;
-import io.restassured.RestAssured;
+import data.Comment_json;
+import data.Post_gorest;
+import data.Post_json;
 import io.restassured.http.ContentType;
-import io.restassured.http.Method;
-import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
-import org.json.simple.JSONObject;
-import org.testng.Assert;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import utils.JsonUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -152,6 +146,30 @@ public class Deserialization {
             //company.get(i).forEach((key, value) -> System.out.println("key: " + key + " | value: " + value));
             System.out.println("-----------------");
         }
+    }
+
+    //NOTE: Converting response body into Pojo class
+    @Test()
+    void test001(){
+        Post_json post = given().get("https://jsonplaceholder.typicode.com/posts/1").as(Post_json.class);
+
+        System.out.println(post.getBody());
+        System.out.println(post.getId());
+        System.out.println(post.getTitle());
+    }
+
+    @Test
+    void test002(){
+        Comment_json comment = given().get("https://jsonplaceholder.typicode.com/comments/1").as(Comment_json.class);
+        System.out.println(comment.getEmail());
+    }
+
+    @Test
+    void test003(){
+        Post_gorest post = given().get("https://gorest.co.in/public-api/posts/17").as(Post_gorest.class);
+
+        System.out.println(post.getCode());
+        System.out.println(post.getData().getCreated_at());
     }
 
 }
