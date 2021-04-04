@@ -28,4 +28,14 @@ public class SchemaValidation {
     }
 
     //Class task: validate schema of Gorest API, resource users = https://gorest.co.in/public-api/users
+    @Test
+    void test03(){
+        given()
+                .get("https://gorest.co.in/public-api/users/14")
+                .then()
+                .body(matchesJsonSchemaInClasspath("userSchema.json"))
+                .log()
+                .body();
+    }
+
 }
